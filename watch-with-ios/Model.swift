@@ -1,5 +1,6 @@
 import SwiftUI
 
+//TODO: Perhaps we are using MyData instead of this.
 class Model: ObservableObject, NSSecureCoding {
     public static var supportsSecureCoding = true
     

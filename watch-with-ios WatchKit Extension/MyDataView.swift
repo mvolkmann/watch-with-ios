@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MyDataView: View {
     @ObservedObject var viewModel: ViewModel
-    @State var colors: [String] = []
+    @State var data = MyData()
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -12,7 +12,7 @@ struct MyDataView: View {
         VStack {
             Text("Color List").font(.title)
             List {
-                ForEach(colors, id: \.self) { color in
+                ForEach(data.colors, id: \.self) { color in
                     Text(color)
                 }
             }
@@ -20,7 +20,7 @@ struct MyDataView: View {
         .onAppear() {
             viewModel.connectionProvider.connect()
             viewModel.connectionProvider.setup()
-            colors = viewModel.connectionProvider.colors
+            data = viewModel.connectionProvider.data
         }
     }
 }

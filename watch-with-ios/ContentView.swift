@@ -9,9 +9,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Phone Color List").font(.title)
+                Text("Phone App").font(.title)
                 NavigationLink(destination: MyDataView(viewModel: viewModel)) {
-                    Text("See color list")
+                    Text("View Colors")
                 }
             }
         }
