@@ -1,16 +1,26 @@
-//
-//  ContentView.swift
-//  watch-with-ios WatchKit Extension
-//
-//  Created by Mark Volkmann on 5/11/22.
-//
-
+// For watchOS
 import SwiftUI
 
 struct ContentView: View {
+    @ObservableObject var viewModel: ViewModel
+    @State var colors: [String] = []
+    
+    let viewModel: ViewModel(connectionProvider: ConnectionProvider())
+
     var body: some View {
-        Text("Hello, World!")
-            .padding()
+        NavigationView {
+            VStack {
+                Text("Watch Color List").font(.title)
+                NavigationLink(destination: DataView(viewModel: viewModel)) {
+                    Text("See color list")
+                }
+                    .padding(50)
+            }
+        }
+            .onAppear() {
+                viewModel.connectionProvider.connect()
+                colors = viewModel.connectionProvider.receivedColors
+            }
     }
 }
 
