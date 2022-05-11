@@ -59,12 +59,12 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     #endif
     
     func setup() {
-        let data = Data()
+        let data = MyData()
         data.addColor("Red")
         data.addColor("Green")
         data.addColor("Blue")
         
-        NSKeyedArchiver.setClassName("Colors", for: Data.self)
+        NSKeyedArchiver.setClassName("MyData", for: MyData.self)
         let bytes = try! NSKeyedArchiver.archivedData(
             withRootObject: data,
             requiringSecureCoding: true
@@ -73,14 +73,14 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     }
     
     func sendWatchMessage(_ data: Data) {
-        let currentTime = CFAbsoluteTimeGetCurrent()
         // Enforce a time gap of at least a half second
         // between sending messages.
+        let currentTime = CFAbsoluteTimeGetCurrent()
         if lastMessage + 0.5 > currentTime { return }
             
         if session.isReachable {
             print("sendWatchMessage is sending a message")
-            let message = ["data", data]
+            let message = ["data": data]
             session.sendMessage(message, replyHandler: nil)
             lastMessage = CFAbsoluteTimeGetCurrent()
         }
@@ -93,12 +93,12 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         print("ConnectionProvider receiving a message")
         if message["data"] != nil {
             let messageData = message["data"]
-            NSKeyedUnarchiver.setClass(Data.self, forClassName: "Data")
+            NSKeyedUnarchiver.setClass(MyData.self, forClassName: "MyData")
             let loadedData = try! NSKeyedUnarchiver.unarchivedObject(
-                ofClasses: [Data.self],
+                ofClasses: [MyData.self],
                 from: messageData as! Data
-            ) as? Data
-            receivedData = loadedData!
+            ) as? MyData
+            receivedColors = loadedData!.colors
             print("ConnectionProvider received a message")
         }
     }

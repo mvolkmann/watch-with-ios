@@ -10,7 +10,7 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 Text("Phone Color List").font(.title)
-                NavigationLink(destination: DataView(viewModel: viewModel)) {
+                NavigationLink(destination: MyDataView(viewModel: viewModel)) {
                     Text("See color list")
                 }
             }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DataView: View {
+struct MyDataView: View {
     @ObservedObject var viewModel: ViewModel
     @State var colors: [String] = []
     

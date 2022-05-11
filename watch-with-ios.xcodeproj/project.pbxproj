@@ -24,12 +24,13 @@
 		1ADD6A33282BB91F00E08217 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A32282BB91F00E08217 /* Model.swift */; };
 		1ADD6A35282BBBC500E08217 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A34282BBBC500E08217 /* ConnectionProvider.swift */; };
 		1ADD6A3B282BD71000E08217 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADD6A3A282BD71000E08217 /* WatchConnectivity.framework */; };
-		1ADD6A3D282BDC3100E08217 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A3C282BDC3100E08217 /* Data.swift */; };
+		1ADD6A3D282BDC3100E08217 /* MyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A3C282BDC3100E08217 /* MyData.swift */; };
 		1ADD6A3F282BDE7500E08217 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A3E282BDE7500E08217 /* ViewModel.swift */; };
-		1ADD6A41282BE01300E08217 /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A40282BE01300E08217 /* DataView.swift */; };
+		1ADD6A41282BE01300E08217 /* MyDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A40282BE01300E08217 /* MyDataView.swift */; };
 		1ADD6A42282BE70300E08217 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A34282BBBC500E08217 /* ConnectionProvider.swift */; };
 		1ADD6A43282BE70300E08217 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A3E282BDE7500E08217 /* ViewModel.swift */; };
-		1ADD6A44282BE70300E08217 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A3C282BDC3100E08217 /* Data.swift */; };
+		1ADD6A44282BE70300E08217 /* MyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A3C282BDC3100E08217 /* MyData.swift */; };
+		1ADD6A46282BF51E00E08217 /* MyDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A45282BF51E00E08217 /* MyDataView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,9 +96,10 @@
 		1ADD6A32282BB91F00E08217 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		1ADD6A34282BBBC500E08217 /* ConnectionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionProvider.swift; sourceTree = "<group>"; };
 		1ADD6A3A282BD71000E08217 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.4.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
-		1ADD6A3C282BDC3100E08217 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		1ADD6A3C282BDC3100E08217 /* MyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyData.swift; sourceTree = "<group>"; };
 		1ADD6A3E282BDE7500E08217 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		1ADD6A40282BE01300E08217 /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
+		1ADD6A40282BE01300E08217 /* MyDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDataView.swift; sourceTree = "<group>"; };
+		1ADD6A45282BF51E00E08217 /* MyDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDataView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,11 +147,11 @@
 			children = (
 				1ADD69F9282BB1E400E08217 /* watch_with_iosApp.swift */,
 				1ADD69FB282BB1E400E08217 /* ContentView.swift */,
-				1ADD6A40282BE01300E08217 /* DataView.swift */,
+				1ADD6A40282BE01300E08217 /* MyDataView.swift */,
 				1ADD6A32282BB91F00E08217 /* Model.swift */,
 				1ADD6A34282BBBC500E08217 /* ConnectionProvider.swift */,
 				1ADD6A3E282BDE7500E08217 /* ViewModel.swift */,
-				1ADD6A3C282BDC3100E08217 /* Data.swift */,
+				1ADD6A3C282BDC3100E08217 /* MyData.swift */,
 				1ADD69FD282BB1E500E08217 /* Assets.xcassets */,
 				1ADD69FF282BB1E500E08217 /* Preview Content */,
 			);
@@ -175,15 +177,16 @@
 		1ADD6A13282BB1E500E08217 /* watch-with-ios WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
-				1ADD6A14282BB1E500E08217 /* watch_with_iosApp.swift */,
+				1ADD6A1E282BB1E600E08217 /* Assets.xcassets */,
+				1ADD6A1C282BB1E500E08217 /* ComplicationController.swift */,
 				1ADD6A16282BB1E500E08217 /* ContentView.swift */,
+				1ADD6A45282BF51E00E08217 /* MyDataView.swift */,
+				1ADD6A23282BB1E600E08217 /* Info.plist */,
 				1ADD6A18282BB1E500E08217 /* NotificationController.swift */,
 				1ADD6A1A282BB1E500E08217 /* NotificationView.swift */,
-				1ADD6A1C282BB1E500E08217 /* ComplicationController.swift */,
-				1ADD6A1E282BB1E600E08217 /* Assets.xcassets */,
-				1ADD6A23282BB1E600E08217 /* Info.plist */,
-				1ADD6A24282BB1E600E08217 /* PushNotificationPayload.apns */,
 				1ADD6A20282BB1E600E08217 /* Preview Content */,
+				1ADD6A24282BB1E600E08217 /* PushNotificationPayload.apns */,
+				1ADD6A14282BB1E500E08217 /* watch_with_iosApp.swift */,
 			);
 			path = "watch-with-ios WatchKit Extension";
 			sourceTree = "<group>";
@@ -336,9 +339,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1ADD6A33282BB91F00E08217 /* Model.swift in Sources */,
-				1ADD6A3D282BDC3100E08217 /* Data.swift in Sources */,
+				1ADD6A3D282BDC3100E08217 /* MyData.swift in Sources */,
 				1ADD69FC282BB1E400E08217 /* ContentView.swift in Sources */,
-				1ADD6A41282BE01300E08217 /* DataView.swift in Sources */,
+				1ADD6A41282BE01300E08217 /* MyDataView.swift in Sources */,
 				1ADD6A35282BBBC500E08217 /* ConnectionProvider.swift in Sources */,
 				1ADD6A3F282BDE7500E08217 /* ViewModel.swift in Sources */,
 				1ADD69FA282BB1E400E08217 /* watch_with_iosApp.swift in Sources */,
@@ -349,9 +352,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1ADD6A46282BF51E00E08217 /* MyDataView.swift in Sources */,
 				1ADD6A42282BE70300E08217 /* ConnectionProvider.swift in Sources */,
 				1ADD6A43282BE70300E08217 /* ViewModel.swift in Sources */,
-				1ADD6A44282BE70300E08217 /* Data.swift in Sources */,
+				1ADD6A44282BE70300E08217 /* MyData.swift in Sources */,
 				1ADD6A19282BB1E500E08217 /* NotificationController.swift in Sources */,
 				1ADD6A17282BB1E500E08217 /* ContentView.swift in Sources */,
 				1ADD6A1D282BB1E500E08217 /* ComplicationController.swift in Sources */,

@@ -1,6 +1,6 @@
 import Foundation
 
-class Data: NSObject {
+class MyData: NSObject {
     var colors: [String]
     
     override init() {
