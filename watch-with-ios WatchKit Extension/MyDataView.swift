@@ -19,7 +19,8 @@ struct MyDataView: View {
         }
         .onAppear() {
             viewModel.connectionProvider.connect()
-            viewModel.connectionProvider.setup()
+            // Should this only be called in the iOS app?
+            //viewModel.connectionProvider.setup()
             data = viewModel.connectionProvider.data
         }
     }

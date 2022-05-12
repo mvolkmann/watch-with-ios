@@ -40,6 +40,8 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         }
     }
     
+    //TODO: Should this only be called on the phone?
+    //TODO: Maybe calling it on either platform sends a message to the other.
     func sendWatchMessage(_ message: Data) {
         // Enforce a time gap of at least a half second
         // between sending messages.
@@ -47,12 +49,14 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         if lastMessage + 0.5 > currentTime { return }
             
         if session.isReachable {
-            print("ConnectionProvider.sendWatchMessage: sending message")
+            print("ConnectionProvider.sendWatchMessage: sending message to watch")
             let message = ["data": message]
             session.sendMessage(message, replyHandler: nil)
             lastMessage = CFAbsoluteTimeGetCurrent()
+            print("ConnectionProvider.sendWatchMessage: sent message to watch")
         } else {
             print("ConnectionProvider.sendWatchMessage: session not reachable")
+            print("Perhaps the watch app is not currently running.")
         }
     }
     
@@ -87,16 +91,28 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         _ session: WCSession,
         didReceiveMessage message: [String : Any]
     ) {
-        print("ConnectionProvider receiving a message")
+        print("ConnectionProvider.session receiving a message")
         if message["data"] != nil {
             let messageData = message["data"]
+            print("ConnectionProvider.session: messageData = \(String(describing: messageData))")
+            
             NSKeyedUnarchiver.setClass(MyData.self, forClassName: "MyData")
-            let loadedData = try! NSKeyedUnarchiver.unarchivedObject(
-                ofClasses: [MyData.self],
-                from: messageData as! Data
-            ) as? MyData
-            receivedData = loadedData!
-            print("ConnectionProvider received a message")
+            
+            do {
+                print("ConnectionProvider.session calling unarchiveObject")
+                let object = try NSKeyedUnarchiver.unarchivedObject(
+                    ofClasses: [MyData.self],
+                    from: messageData as! Data
+                )
+                print("ConnectionProvider.session returned from unarchiveObject")
+                print("ConnectionProvider.session: object = \(String(describing: object))")
+                let data = object as? MyData
+                print("ConnectionProvider.session: data = \(String(describing: data))")
+                receivedData = data!
+                print("ConnectionProvider.session received a message")
+            } catch {
+                print("ConnectionProvider.session error unarchiving \(error.localizedDescription)")
+            }
         }
     }
     
@@ -107,10 +123,14 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         data.addColor("Blue")
         
         NSKeyedArchiver.setClassName("MyData", for: MyData.self)
-        let bytes = try! NSKeyedArchiver.archivedData(
-            withRootObject: data,
-            requiringSecureCoding: true
-        )
-        sendWatchMessage(bytes)
+        do {
+            let bytes = try NSKeyedArchiver.archivedData(
+                withRootObject: data,
+                requiringSecureCoding: true
+            )
+            sendWatchMessage(bytes)
+        } catch {
+            print("ConnectionProvider.setup error archiving \(error.localizedDescription)")
+        }
     }
 }

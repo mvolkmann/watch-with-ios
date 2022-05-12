@@ -13,6 +13,7 @@ struct ContentView: View {
                 NavigationLink(destination: MyDataView(viewModel: viewModel)) {
                     Text("View Colors")
                 }
+                Spacer()
             }
         }
             .onAppear() {

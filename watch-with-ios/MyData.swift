@@ -1,11 +1,18 @@
 import Foundation
 
+// NSObject implements the CustomStringConvertible protocol.
 class MyData: NSObject, ObservableObject, NSSecureCoding {
     static var supportsSecureCoding = true
+    
+    // Override the implementation of description in NSObject.
+    override var description: String {
+        "MyData: colors = \(colors)"
+    }
     
     let id = UUID()
     @Published var colors: [String]
     
+    // Override the initializer in NSObject.
     override init() {
         colors = []
     }
