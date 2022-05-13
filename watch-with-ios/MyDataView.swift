@@ -6,7 +6,6 @@ struct MyDataView: View {
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
-        print("MyDataView: viewModel = \(viewModel)")
     }
     
     var body: some View {
@@ -28,11 +27,10 @@ struct MyDataView: View {
             }
         }
         .onAppear() {
-            print("MyDataView inside onAppear")
             viewModel.connectionProvider.connect()
             viewModel.connectionProvider.setup()
             data = viewModel.connectionProvider.data
-            print("MyDataView on phone: data = \(data)")
+            //print("MyDataView on phone: data = \(data)")
         }
     }
 }

@@ -4,13 +4,6 @@ struct MyDataView: View {
     @ObservedObject var viewModel: ViewModel
     @State var data = MyData()
     
-    /*
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-        print("MyDataView: viewModel = \(viewModel)")
-    }
-    */
-    
     var body: some View {
         VStack {
             Text("Color List").font(.title)
@@ -34,7 +27,7 @@ struct MyDataView: View {
             // Should this only be called in the iOS app?
             //viewModel.connectionProvider.setup()
             data = viewModel.connectionProvider.receivedData
-            print("MyDataView on watch: data = \(data)")
+            //print("MyDataView on watch: data = \(data)")
         }
     }
 }
