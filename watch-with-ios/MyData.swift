@@ -2,6 +2,10 @@ import Foundation
 
 // We must inherit from NSObject in order to use encode/decode these objects.
 // NSObject implements the CustomStringConvertible protocol.
+// The @objc is necessary to ensure that this class
+// has the same "full name" on both the phone and watch.
+// See https://stackoverflow.com/questions/69669106/cant-unarchive-a-file-sent-by-watch.
+@objc(MyData)
 class MyData: NSObject, ObservableObject, NSSecureCoding {
     static var supportsSecureCoding = true
     
