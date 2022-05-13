@@ -2,10 +2,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    let connectionProvider = ConnectionProvider()
+    // @EnvironmentObject var model: Model
+
+    let connectionProvider: ConnectionProvider
+    let model: Model
     let viewModel: ViewModel
-    
-    init() {
+
+    init(model: Model) {
+        self.model = model
+        connectionProvider = ConnectionProvider(model: model)
         viewModel = ViewModel(connectionProvider: connectionProvider)
     }
 
@@ -16,14 +21,16 @@ struct ContentView: View {
             print("Perhaps the phone app is not currently running.")
             return
         }
-        
+
         let message = "from watch"
         do {
             let bytes = try NSKeyedArchiver.archivedData(
                 withRootObject: message,
                 requiringSecureCoding: true
             )
-            connectionProvider.send(message: ["message": bytes])
+            // TODO: Why does this give the error
+            // TODO: "WCSession iOS app not installed"?
+            connectionProvider.send(message: ["text": bytes])
         } catch {
             print("ContentView.sendMessage: error \(error.localizedDescription)")
         }
@@ -38,7 +45,13 @@ struct ContentView: View {
                 }
                 Button("Send to Phone", action: sendMessage)
                     .buttonStyle(.borderedProminent)
+                Text("From phone: \(model.message)")
             }
+        }
+        .onAppear {
+            connectionProvider.connect()
+            let reachable = connectionProvider.session.isReachable
+            print("session reachable? \(reachable)")
         }
     }
 }

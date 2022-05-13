@@ -2,10 +2,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    let connectionProvider = ConnectionProvider()
+    @State var message = ""
+    
+    //let connectionProvider = ConnectionProvider()
+    let connectionProvider: ConnectionProvider
     let viewModel: ViewModel
     
-    init() {
+    init(model: Model) {
+        connectionProvider = ConnectionProvider(model: model)
         viewModel = ViewModel(connectionProvider: connectionProvider)
     }
     
@@ -17,13 +21,14 @@ struct ContentView: View {
             return
         }
         
-        let message = "from phone"
         do {
             let bytes = try NSKeyedArchiver.archivedData(
                 withRootObject: message,
                 requiringSecureCoding: true
             )
-            connectionProvider.send(message: ["message": bytes])
+            connectionProvider.send(message: ["text": bytes])
+            print("sent message: \(message)")
+            message = ""
         } catch {
             print("ContentView.sendMessage: error \(error.localizedDescription)")
         }
@@ -31,24 +36,25 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                Text("Phone App").font(.title)
-                NavigationLink(destination: MyDataView(viewModel: viewModel)) {
-                    Text("View Colors")
+            Form {
+                VStack {
+                    Text("Phone App").font(.title)
+                    NavigationLink(destination: MyDataView(viewModel: viewModel)) {
+                        Text("View Colors")
+                    }
+                    TextField("message", text: $message)
+                        .textFieldStyle(.roundedBorder)
+                    Button("Send to Watch", action: sendMessage)
+                        .buttonStyle(.borderedProminent)
+                        .disabled(message.isEmpty)
+                    Spacer()
                 }
-                Button("Send to Watch", action: sendMessage)
-                    .buttonStyle(.borderedProminent)
-                Spacer()
             }
         }
             .onAppear() {
                 connectionProvider.connect()
+                let reachable = connectionProvider.session.isReachable
+                print("session reachable? \(reachable)")
             }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

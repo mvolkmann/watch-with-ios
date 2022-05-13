@@ -1,16 +1,21 @@
+import SwiftUI
 import WatchConnectivity
 
 class ConnectionProvider: NSObject, WCSessionDelegate {
+    //@EnvironmentObject var model: Model
+
     static let dataClassName = "MyData"
     static let messageKey = "data"
     
+    let model: Model
     let session: WCSession
 
     var data = MyData() // used on phone
     var receivedData = MyData() // used on watch
     var lastMessage: CFAbsoluteTime = 0
     
-    init(session: WCSession = .default) {
+    init(model: Model, session: WCSession = .default) {
+        self.model = model
         self.session = session
         super.init()
         self.session.delegate = self
@@ -101,16 +106,20 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         _ session: WCSession,
         didReceiveMessage message: [String : Any]
     ) {
-        print("ConnectionProvider.session: message = \(message)")
-        
-        guard let bytes = message[ConnectionProvider.messageKey] as? Data else {
-            print("ConnectionProvider.session: no message with key \(ConnectionProvider.messageKey) found")
-            return
-        }
-        
         do {
-            receivedData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes) as! MyData
-            print("ConnectionProvider: receivedData = \(receivedData)")
+            if let bytes = message["text"] as? Data {
+                let object = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes)
+                let text = object as! String
+                print("text = \(text)")
+                Task
+                model.message = text
+            }
+            
+            if let bytes = message[ConnectionProvider.messageKey] as? Data {
+                let object = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes)
+                receivedData = object as! MyData
+                print("ConnectionProvider: receivedData = \(receivedData)")
+            }
         } catch {
             print("ConnectionProvider.session error unarchiving \(error.localizedDescription)")
         }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A357FE5282E992B00617DC2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A357FE4282E992B00617DC2 /* Model.swift */; };
+		1A357FE6282E994F00617DC2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A357FE4282E992B00617DC2 /* Model.swift */; };
 		1ADD69FA282BB1E400E08217 /* watch_with_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD69F9282BB1E400E08217 /* watch_with_iosApp.swift */; };
 		1ADD69FC282BB1E400E08217 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD69FB282BB1E400E08217 /* ContentView.swift */; };
 		1ADD69FE282BB1E500E08217 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ADD69FD282BB1E500E08217 /* Assets.xcassets */; };
@@ -75,6 +77,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1A357FE4282E992B00617DC2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		1ADD69F6282BB1E400E08217 /* watch-with-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "watch-with-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1ADD69F9282BB1E400E08217 /* watch_with_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = watch_with_iosApp.swift; sourceTree = "<group>"; };
 		1ADD69FB282BB1E400E08217 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -146,6 +149,7 @@
 				1ADD69FD282BB1E500E08217 /* Assets.xcassets */,
 				1ADD6A34282BBBC500E08217 /* ConnectionProvider.swift */,
 				1ADD69FB282BB1E400E08217 /* ContentView.swift */,
+				1A357FE4282E992B00617DC2 /* Model.swift */,
 				1ADD6A3C282BDC3100E08217 /* MyData.swift */,
 				1ADD6A40282BE01300E08217 /* MyDataView.swift */,
 				1ADD69FF282BB1E500E08217 /* Preview Content */,
@@ -335,6 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A357FE5282E992B00617DC2 /* Model.swift in Sources */,
 				1ADD6A3D282BDC3100E08217 /* MyData.swift in Sources */,
 				1ADD69FC282BB1E400E08217 /* ContentView.swift in Sources */,
 				1ADD6A41282BE01300E08217 /* MyDataView.swift in Sources */,
@@ -348,6 +353,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A357FE6282E994F00617DC2 /* Model.swift in Sources */,
 				1ADD6A46282BF51E00E08217 /* MyDataView.swift in Sources */,
 				1ADD6A42282BE70300E08217 /* ConnectionProvider.swift in Sources */,
 				1ADD6A43282BE70300E08217 /* ViewModel.swift in Sources */,
@@ -497,7 +503,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "watch-with-ios WatchKit Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "watch-with-ios WatchKit Extension";
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = watch_with_ios_WatchKit_Extension.ComplicationController;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -529,7 +535,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "watch-with-ios WatchKit Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "watch-with-ios WatchKit Extension";
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = "$(PRODUCT_MODULE_NAME).ComplicationController";
+				INFOPLIST_KEY_CLKComplicationPrincipalClass = watch_with_ios_WatchKit_Extension.ComplicationController;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				LD_RUNPATH_SEARCH_PATHS = (

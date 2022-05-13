@@ -1,17 +1,12 @@
-//
-//  watch_with_iosApp.swift
-//  watch-with-ios
-//
-//  Created by Mark Volkmann on 5/11/22.
-//
-
 import SwiftUI
 
 @main
 struct watch_with_iosApp: App {
+    @StateObject private var model = Model()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(model: model) //.environmentObject(model)
         }
     }
 }
