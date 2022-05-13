@@ -45,6 +45,7 @@ class MyData: NSObject, ObservableObject, NSSecureCoding {
     
     func deleteColors(at: IndexSet) {
         colors.remove(atOffsets: at)
+        connectionProvider.sendValue(key: "colors", value: colors)
     }
     
     func encode(with coder: NSCoder) {
@@ -55,5 +56,6 @@ class MyData: NSObject, ObservableObject, NSSecureCoding {
     
     func moveColors(from: IndexSet, to: Int) {
         colors.move(fromOffsets: from, toOffset: to)
+        connectionProvider.sendValue(key: "colors", value: colors)
     }
 }

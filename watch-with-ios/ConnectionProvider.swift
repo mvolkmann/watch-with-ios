@@ -134,7 +134,6 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         format.timeStyle = .medium
         format.dateStyle = .medium
         let dateString = format.string(from: Date())
-        print("ConnectionProvider.setup: dateString = \(dateString)")
         data.addColor(dateString)
 
         data.addColor("Red")
