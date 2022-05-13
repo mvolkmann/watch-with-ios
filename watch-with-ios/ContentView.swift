@@ -2,9 +2,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    //TODO: Why does this create two instances of ConnectionProvider?
-    let viewModel = ViewModel(connectionProvider: ConnectionProvider())
     let connectionProvider = ConnectionProvider()
+    let viewModel: ViewModel
+    
+    init() {
+        viewModel = ViewModel(connectionProvider: connectionProvider)
+    }
     
     var body: some View {
         NavigationView {
