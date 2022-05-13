@@ -9,6 +9,29 @@ struct ContentView: View {
         viewModel = ViewModel(connectionProvider: connectionProvider)
     }
     
+    func sendMessage() {
+        let session = connectionProvider.session
+        if !session.isReachable {
+            print("ContentView.sendMessage: session not reachable")
+            print("Perhaps the watch app is not currently running.")
+            return
+        }
+        
+        let message = "from phone"
+        do {
+            let bytes = try NSKeyedArchiver.archivedData(
+                withRootObject: message,
+                requiringSecureCoding: true
+            )
+            let message = ["message": bytes]
+            session.sendMessage(message, replyHandler: nil) { error in
+                print("ContentView.sendMessage error: \(error)")
+            }
+        } catch {
+            print("ContentView.sendMessage: error \(error.localizedDescription)")
+        }
+    }
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -16,6 +39,8 @@ struct ContentView: View {
                 NavigationLink(destination: MyDataView(viewModel: viewModel)) {
                     Text("View Colors")
                 }
+                Button("Send to Watch", action: sendMessage)
+                    .buttonStyle(.borderedProminent)
                 Spacer()
             }
         }

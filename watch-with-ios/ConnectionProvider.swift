@@ -4,7 +4,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     static let dataClassName = "MyData"
     static let messageKey = "data"
     
-    private let session: WCSession
+    let session: WCSession
 
     var data = MyData() // used on phone
     var receivedData = MyData() // used on watch
@@ -41,7 +41,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     func send(message: [String: Any]) {
         session.sendMessage(message, replyHandler: nil) { error in
             // This is only called when there is an error.
-            print("ConnectionProvicer.send error: \(error.localizedDescription)")
+            print("ConnectionProvider.send error: \(error.localizedDescription)")
         }
     }
     
@@ -60,7 +60,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
             
             session.sendMessage(message, replyHandler: nil) { error in
                 // This is only called when there is an error.
-                print("ConnectionProvicer.sendMessage error: \(error)")
+                print("ConnectionProvider.sendMessage error: \(error)")
             }
             lastMessage = CFAbsoluteTimeGetCurrent()
         } else {
@@ -101,6 +101,8 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         _ session: WCSession,
         didReceiveMessage message: [String : Any]
     ) {
+        print("ConnectionProvider.session: message = \(message)")
+        
         guard let bytes = message[ConnectionProvider.messageKey] as? Data else {
             print("ConnectionProvider.session: no message with key \(ConnectionProvider.messageKey) found")
             return
