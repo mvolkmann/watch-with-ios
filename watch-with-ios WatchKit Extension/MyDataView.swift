@@ -34,7 +34,7 @@ struct MyDataView: View {
             // Should this only be called in the iOS app?
             //viewModel.connectionProvider.setup()
             data = viewModel.connectionProvider.receivedData
-            print("MyDataView onAppear: data = \(data)")
+            print("MyDataView on watch: data = \(data)")
         }
     }
 }

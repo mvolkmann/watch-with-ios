@@ -32,7 +32,7 @@ struct MyDataView: View {
             viewModel.connectionProvider.connect()
             viewModel.connectionProvider.setup()
             data = viewModel.connectionProvider.data
-            print("MyDataView onAppear: data = \(data)")
+            print("MyDataView on phone: data = \(data)")
         }
     }
 }

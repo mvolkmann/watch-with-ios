@@ -20,13 +20,6 @@ class MyData: NSObject, ObservableObject, NSSecureCoding {
     
     // Decodes data.
     required convenience init?(coder: NSCoder) {
-        /*
-        guard let colors = coder.decodeObject(forKey: "colors") as? [String]
-        else {
-            print("MyData.init: failed to decode data")
-            return nil
-        }
-        */
         let count = coder.decodeInteger(forKey: "colorCount")
                 
         var colors = [String]()

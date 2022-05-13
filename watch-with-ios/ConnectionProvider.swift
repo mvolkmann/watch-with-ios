@@ -48,20 +48,21 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     func sendMessage(_ bytes: Data) {
         // Enforce a time gap of at least a half second
         // between sending messages.
-        let currentTime = CFAbsoluteTimeGetCurrent()
-        if lastMessage + 0.5 > currentTime { return }
+        //let currentTime = CFAbsoluteTimeGetCurrent()
+        //if lastMessage + 0.5 > currentTime { return }
             
         if session.isReachable {
-            print("ConnectionProvider.sendWatchMessage: sending message to watch")
             //TODO: Need to create and send a Dictionary?
             let message = [ConnectionProvider.messageKey: bytes]
-            print("ConnectionProvider.sendWatchMessage: message = \(message)")
+            print("ConnectionProvider.sendMessage: message = \(message)")
             
-            session.sendMessage(message, replyHandler: nil)
+            session.sendMessage(message, replyHandler: nil) { error in
+                print("ConnectionProvider.sendMessage: error = \(error)")
+            }
             lastMessage = CFAbsoluteTimeGetCurrent()
-            print("ConnectionProvider.sendWatchMessage: sent message to watch")
+            print("ConnectionProvider.sendMessage: sent message to watch")
         } else {
-            print("ConnectionProvider.sendWatchMessage: session not reachable")
+            print("ConnectionProvider.sendMessage: session not reachable")
             print("Perhaps the watch app is not currently running.")
         }
     }
@@ -93,30 +94,21 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     }
     #endif
     
+    // This is called when a message is received.
     func session(
         _ session: WCSession,
         didReceiveMessage message: [String : Any]
     ) {
-        guard let messageData = message[ConnectionProvider.messageKey] else {
+        print("ConnectionProvider.session: message = \(message)")
+        guard let bytes = message[ConnectionProvider.messageKey] else {
             print("ConnectionProvider.session: no message with key \(ConnectionProvider.messageKey) found")
             return
         }
-        
-        print("ConnectionProvider.session: messageData = \(String(describing: messageData))")
-        NSKeyedUnarchiver.setClass(MyData.self, forClassName: ConnectionProvider.dataClassName)
+        print("ConnectionProvider.session: bytes = \(String(describing: bytes))")
         
         do {
-            print("ConnectionProvider.session calling unarchiveObject")
-            let object = try NSKeyedUnarchiver.unarchivedObject(
-                ofClasses: [MyData.self],
-                from: messageData as! Data
-            )
-            print("ConnectionProvider.session returned from unarchiveObject")
-            print("ConnectionProvider.session: object = \(String(describing: object))")
-            let data = object as? MyData
-            print("ConnectionProvider.session: data = \(String(describing: data))")
-            receivedData = data!
-            print("ConnectionProvider.session received a message")
+            receivedData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes as! Data) as! MyData
+            print("ConnectionProvider.session: receivedData = \(String(describing: receivedData))")
         } catch {
             print("ConnectionProvider.session error unarchiving \(error.localizedDescription)")
         }
@@ -138,44 +130,18 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         data.addColor("Pink")
         data.addColor("Turquoise")
         
-        /*
-        NSKeyedArchiver.setClassName(
-            ConnectionProvider.dataClassName,
-            for: MyData.self
-        )
-        */
         do {
             let bytes = try NSKeyedArchiver.archivedData(
                 withRootObject: data,
                 requiringSecureCoding: true
             )
+            print("ConnectionProvider.setup: bytes = \(String(describing: bytes))")
             
             // Demonstrate that we can unarchive the data.
-            do {
-                // Approach #1
-                /*
-                let data = try NSKeyedUnarchiver.unarchivedObject(
-                     ofClass: MyData.self,
-                     from: bytes
-                )
-                */
-                
-                // Approach #2
-                let newData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes) as? MyData
-                
-                // Approach #3
-                /*
-                let unarchiver = try NSKeyedUnarchiver(forReadingFrom: bytes)
-                unarchiver.requiresSecureCoding = true
-                let data = try unarchiver.decodeTopLevelObject() as! MyData
-                */
-                
-                print("ConnectionProvider.setup: newData = \(String(describing: newData))")
-            } catch {
-                print("ConnectionProvider.setup error unarchiving \(error.localizedDescription)")
-            }
+            let newData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes) as? MyData
+            print("ConnectionProvider.setup: newData = \(String(describing: newData))")
             
-            //sendMessage(bytes)
+            sendMessage(bytes)
         } catch {
             print("ConnectionProvider.setup error archiving \(error.localizedDescription)")
         }
