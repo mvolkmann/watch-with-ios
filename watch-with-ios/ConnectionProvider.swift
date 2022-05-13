@@ -108,6 +108,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         
         do {
             receivedData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes) as! MyData
+            print("ConnectionProvider: receivedData = \(receivedData)")
         } catch {
             print("ConnectionProvider.session error unarchiving \(error.localizedDescription)")
         }
@@ -115,6 +116,14 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     
     func setup() {
         data.colors.removeAll()
+        
+        let format = DateFormatter()
+        format.timeStyle = .medium
+        format.dateStyle = .medium
+        let dateString = format.string(from: Date())
+        print("ConnectionProvider.setup: dateString = \(dateString)")
+        data.addColor(dateString)
+        
         data.addColor("Red")
         data.addColor("Orange")
         data.addColor("Yellow")

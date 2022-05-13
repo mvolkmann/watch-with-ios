@@ -24,9 +24,13 @@ struct MyDataView: View {
         }
         .onAppear() {
             viewModel.connectionProvider.connect()
+            
             // Should this only be called in the iOS app?
+            // I'm getting an error which this is called that says
+            // "WCSession iOS app not installed".
             //viewModel.connectionProvider.setup()
             data = viewModel.connectionProvider.receivedData
+            
             //print("MyDataView on watch: data = \(data)")
         }
     }
