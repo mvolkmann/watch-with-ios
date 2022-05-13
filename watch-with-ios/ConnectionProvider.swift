@@ -52,12 +52,14 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         //if lastMessage + 0.5 > currentTime { return }
             
         if session.isReachable {
-            //TODO: Need to create and send a Dictionary?
+            // The WCSession sendMessage method requires
+            // a Dictionary with String keys and Any values.
             let message = [ConnectionProvider.messageKey: bytes]
             print("ConnectionProvider.sendMessage: message = \(message)")
             
             session.sendMessage(message, replyHandler: nil) { error in
-                print("ConnectionProvider.sendMessage: error = \(error)")
+                // This is only called when there is an error.
+                print("ConnectionProvicer.sendMessage error: \(error)")
             }
             lastMessage = CFAbsoluteTimeGetCurrent()
             print("ConnectionProvider.sendMessage: sent message to watch")
@@ -100,14 +102,14 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         didReceiveMessage message: [String : Any]
     ) {
         print("ConnectionProvider.session: message = \(message)")
-        guard let bytes = message[ConnectionProvider.messageKey] else {
+        guard let bytes = message[ConnectionProvider.messageKey] as? Data else {
             print("ConnectionProvider.session: no message with key \(ConnectionProvider.messageKey) found")
             return
         }
         print("ConnectionProvider.session: bytes = \(String(describing: bytes))")
         
         do {
-            receivedData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes as! Data) as! MyData
+            receivedData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes) as! MyData
             print("ConnectionProvider.session: receivedData = \(String(describing: receivedData))")
         } catch {
             print("ConnectionProvider.session error unarchiving \(error.localizedDescription)")
