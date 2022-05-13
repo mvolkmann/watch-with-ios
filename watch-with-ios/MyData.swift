@@ -1,5 +1,6 @@
 import Foundation
 
+// We must inherit from NSObject in order to use encode/decode these objects.
 // NSObject implements the CustomStringConvertible protocol.
 class MyData: NSObject, ObservableObject, NSSecureCoding {
     static var supportsSecureCoding = true
@@ -19,9 +20,24 @@ class MyData: NSObject, ObservableObject, NSSecureCoding {
     
     // Decodes data.
     required convenience init?(coder: NSCoder) {
+        /*
         guard let colors = coder.decodeObject(forKey: "colors") as? [String]
-        else { return nil }
-        
+        else {
+            print("MyData.init: failed to decode data")
+            return nil
+        }
+        */
+        let count = coder.decodeInteger(forKey: "colorCount")
+                
+        var colors = [String]()
+        for _ in 0 ..< count {
+            guard let color = coder.decodeObject() as? String else {
+                print("MyData.init: failed to decode color")
+                return nil
+            }
+            colors.append(color)
+        }
+                        
         self.init()
         self.colors = colors
     }
@@ -35,7 +51,9 @@ class MyData: NSObject, ObservableObject, NSSecureCoding {
     }
     
     func encode(with coder: NSCoder) {
-        coder.encode(colors, forKey: "colors")
+        //coder.encode(colors, forKey: "colors")
+        coder.encode(colors.count, forKey: "colorCount")
+        colors.forEach { coder.encode($0) }
     }
     
     func moveColors(from: IndexSet, to: Int) {

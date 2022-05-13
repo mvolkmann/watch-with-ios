@@ -21,7 +21,6 @@
 		1ADD6A1D282BB1E500E08217 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A1C282BB1E500E08217 /* ComplicationController.swift */; };
 		1ADD6A1F282BB1E600E08217 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ADD6A1E282BB1E600E08217 /* Assets.xcassets */; };
 		1ADD6A22282BB1E600E08217 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ADD6A21282BB1E600E08217 /* Preview Assets.xcassets */; };
-		1ADD6A33282BB91F00E08217 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A32282BB91F00E08217 /* Model.swift */; };
 		1ADD6A35282BBBC500E08217 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A34282BBBC500E08217 /* ConnectionProvider.swift */; };
 		1ADD6A3B282BD71000E08217 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ADD6A3A282BD71000E08217 /* WatchConnectivity.framework */; };
 		1ADD6A3D282BDC3100E08217 /* MyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADD6A3C282BDC3100E08217 /* MyData.swift */; };
@@ -93,7 +92,6 @@
 		1ADD6A21282BB1E600E08217 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1ADD6A23282BB1E600E08217 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1ADD6A24282BB1E600E08217 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		1ADD6A32282BB91F00E08217 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		1ADD6A34282BBBC500E08217 /* ConnectionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionProvider.swift; sourceTree = "<group>"; };
 		1ADD6A3A282BD71000E08217 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.4.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
 		1ADD6A3C282BDC3100E08217 /* MyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyData.swift; sourceTree = "<group>"; };
@@ -127,8 +125,8 @@
 				1ADD69F8282BB1E400E08217 /* watch-with-ios */,
 				1ADD6A08282BB1E500E08217 /* watch-with-ios WatchKit App */,
 				1ADD6A13282BB1E500E08217 /* watch-with-ios WatchKit Extension */,
-				1ADD69F7282BB1E400E08217 /* Products */,
 				1ADD6A39282BD71000E08217 /* Frameworks */,
+				1ADD69F7282BB1E400E08217 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -145,15 +143,14 @@
 		1ADD69F8282BB1E400E08217 /* watch-with-ios */ = {
 			isa = PBXGroup;
 			children = (
-				1ADD69F9282BB1E400E08217 /* watch_with_iosApp.swift */,
-				1ADD69FB282BB1E400E08217 /* ContentView.swift */,
-				1ADD6A40282BE01300E08217 /* MyDataView.swift */,
-				1ADD6A32282BB91F00E08217 /* Model.swift */,
-				1ADD6A34282BBBC500E08217 /* ConnectionProvider.swift */,
-				1ADD6A3E282BDE7500E08217 /* ViewModel.swift */,
-				1ADD6A3C282BDC3100E08217 /* MyData.swift */,
 				1ADD69FD282BB1E500E08217 /* Assets.xcassets */,
+				1ADD6A34282BBBC500E08217 /* ConnectionProvider.swift */,
+				1ADD69FB282BB1E400E08217 /* ContentView.swift */,
+				1ADD6A3C282BDC3100E08217 /* MyData.swift */,
+				1ADD6A40282BE01300E08217 /* MyDataView.swift */,
 				1ADD69FF282BB1E500E08217 /* Preview Content */,
+				1ADD6A3E282BDE7500E08217 /* ViewModel.swift */,
+				1ADD69F9282BB1E400E08217 /* watch_with_iosApp.swift */,
 			);
 			path = "watch-with-ios";
 			sourceTree = "<group>";
@@ -180,8 +177,8 @@
 				1ADD6A1E282BB1E600E08217 /* Assets.xcassets */,
 				1ADD6A1C282BB1E500E08217 /* ComplicationController.swift */,
 				1ADD6A16282BB1E500E08217 /* ContentView.swift */,
-				1ADD6A45282BF51E00E08217 /* MyDataView.swift */,
 				1ADD6A23282BB1E600E08217 /* Info.plist */,
+				1ADD6A45282BF51E00E08217 /* MyDataView.swift */,
 				1ADD6A18282BB1E500E08217 /* NotificationController.swift */,
 				1ADD6A1A282BB1E500E08217 /* NotificationView.swift */,
 				1ADD6A20282BB1E600E08217 /* Preview Content */,
@@ -338,7 +335,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1ADD6A33282BB91F00E08217 /* Model.swift in Sources */,
 				1ADD6A3D282BDC3100E08217 /* MyData.swift in Sources */,
 				1ADD69FC282BB1E400E08217 /* ContentView.swift in Sources */,
 				1ADD6A41282BE01300E08217 /* MyDataView.swift in Sources */,
