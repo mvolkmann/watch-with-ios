@@ -1,6 +1,6 @@
 import SwiftUI
 
 class Model: ObservableObject {
-    @Published var colors: [String] = []
+    @Published var data = MyData()
     @Published var message = ""
 }

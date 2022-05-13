@@ -8,8 +8,6 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     let model: Model
     let session: WCSession
 
-    var data = MyData() // used on phone
-    var receivedData = MyData() // used on watch
     var lastMessage: CFAbsoluteTime = 0
 
     // We cannot use @EnvironmentObject to get access to the model here
@@ -40,7 +38,6 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
             print("ConnectionProvider.connect: WCSession is not supported")
             return
         }
-
         session.activate()
     }
 
@@ -111,7 +108,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
             if let bytes = message["text"] as? Data {
                 let object = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes)
                 let text = object as! String
-                print("text = \(text)")
+                print("ConnectionProvider.session: text = \(text)")
                 
                 // Update the model on the main thread.
                 Task {
@@ -121,12 +118,12 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
 
             if let bytes = message[ConnectionProvider.messageKey] as? Data {
                 let object = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes)
-                receivedData = object as! MyData
-                print("ConnectionProvider: receivedData = \(receivedData)")
+                let data = object as! MyData
+                print("ConnectionProvider.session: data = \(data)")
                 
                 // Update the model on the main thread.
                 Task {
-                    await MainActor.run { model.colors = receivedData.colors }
+                    await MainActor.run { model.data = data }
                 }
             }
         } catch {
@@ -135,6 +132,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     }
 
     func setup() {
+        let data = model.data
         data.colors.removeAll()
 
         let format = DateFormatter()
@@ -157,6 +155,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         data.addColor("Tan")
         data.addColor("Pink")
         data.addColor("Turquoise")
+        print("model colors = \(model.data.colors)")
 
         do {
             let bytes = try NSKeyedArchiver.archivedData(

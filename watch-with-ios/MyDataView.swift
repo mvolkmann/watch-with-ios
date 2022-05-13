@@ -1,11 +1,12 @@
 import SwiftUI
 
 struct MyDataView: View {
-    @ObservedObject var viewModel: ViewModel
-    @State var data = MyData()
+    @EnvironmentObject var model: Model
     
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+    let connectionProvider: ConnectionProvider
+    
+    init(_ connectionProvider: ConnectionProvider) {
+        self.connectionProvider = connectionProvider
     }
     
     var body: some View {
@@ -14,23 +15,20 @@ struct MyDataView: View {
             // onDelete and onMove work inside a List,
             // but not inside a ScrollView.
             List {
-                ForEach(data.colors, id: \.self) { color in
+                ForEach(model.data.colors, id: \.self) { color in
                     Text(color)
                         .foregroundColor(.blue)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 // Swipe from right to left and tap red "X" button.
-                .onDelete { data.deleteColors(at: $0) }
+                .onDelete { model.data.deleteColors(at: $0) }
                 // Press for a second and then drag up or down.
-                .onMove { data.moveColors(from: $0, to: $1) }
+                .onMove { model.data.moveColors(from: $0, to: $1) }
             }
         }
-        .onAppear() {
-            viewModel.connectionProvider.connect()
-            viewModel.connectionProvider.setup()
-            data = viewModel.connectionProvider.data
-            //print("MyDataView on phone: data = \(data)")
+        .onAppear {
+            connectionProvider.setup()
         }
     }
 }

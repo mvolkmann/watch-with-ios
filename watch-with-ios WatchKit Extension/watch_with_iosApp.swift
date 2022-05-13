@@ -1,5 +1,6 @@
 import SwiftUI
 
+// watchOS app
 @main
 struct watch_with_iosApp: App {
     @StateObject private var model = Model()

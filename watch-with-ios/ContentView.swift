@@ -6,7 +6,6 @@ struct ContentView: View {
 
     let connectionProvider: ConnectionProvider
     let model: Model
-    let viewModel: ViewModel
 
     // We need to pass the model in so it can be used in this initializer.
     // If @EnvironmentObject is used to get the model,
@@ -14,7 +13,6 @@ struct ContentView: View {
     init(_ model: Model) {
         self.model = model
         connectionProvider = ConnectionProvider(model: model)
-        viewModel = ViewModel(connectionProvider: connectionProvider)
     }
 
     func sendMessage() {
@@ -43,7 +41,7 @@ struct ContentView: View {
             Form {
                 VStack {
                     Text("Phone App").font(.title)
-                    NavigationLink(destination: MyDataView(viewModel: viewModel)) {
+                    NavigationLink(destination: MyDataView(connectionProvider)) {
                         Text("View Colors")
                     }
                     TextField("message", text: $message)
@@ -58,6 +56,7 @@ struct ContentView: View {
         }
         .onAppear {
             connectionProvider.connect()
+            connectionProvider.setup()
             let reachable = connectionProvider.session.isReachable
             print("session reachable? \(reachable)")
         }
