@@ -17,22 +17,11 @@ struct ContentView: View {
 
     func sendMessage() {
         let session = connectionProvider.session
-        if !session.isReachable {
+        if session.isReachable {
+            connectionProvider.sendValue(key: "text", value: message)
+        } else {
             print("ContentView.sendMessage: session not reachable")
             print("Perhaps the phone app is not currently running.")
-            return
-        }
-
-        do {
-            let bytes = try NSKeyedArchiver.archivedData(
-                withRootObject: message,
-                requiringSecureCoding: true
-            )
-            // TODO: Why does this give the error
-            // TODO: "WCSession iOS app not installed"?
-            connectionProvider.send(message: ["text": bytes])
-        } catch {
-            print("ContentView.sendMessage: error \(error.localizedDescription)")
         }
     }
 

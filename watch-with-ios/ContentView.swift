@@ -23,17 +23,9 @@ struct ContentView: View {
             return
         }
 
-        do {
-            let bytes = try NSKeyedArchiver.archivedData(
-                withRootObject: message,
-                requiringSecureCoding: true
-            )
-            connectionProvider.send(message: ["text": bytes])
-            print("sent message: \(message)")
-            message = ""
-        } catch {
-            print("ContentView.sendMessage: error \(error.localizedDescription)")
-        }
+        connectionProvider.sendValue(key: "text", value: message)
+        print("sent message: \(message)")
+        message = ""
     }
 
     var body: some View {

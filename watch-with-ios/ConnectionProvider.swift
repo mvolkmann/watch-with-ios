@@ -3,12 +3,9 @@ import WatchConnectivity
 
 class ConnectionProvider: NSObject, WCSessionDelegate {
     static let dataClassName = "MyData"
-    static let messageKey = "data"
 
     let model: Model
     let session: WCSession
-
-    var lastMessage: CFAbsoluteTime = 0
 
     // We cannot use @EnvironmentObject to get access to the model here
     // because that only works in View subclasses.
@@ -40,35 +37,41 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         }
         session.activate()
     }
-
-    func send(message: [String: Any]) {
-        session.sendMessage(message, replyHandler: nil) { error in
-            // This is only called when there is an error.
-            print("ConnectionProvider.send error: \(error.localizedDescription)")
+    
+    func extractValue(key: String, message: [String: Any]) -> Any? {
+        do {
+            if let bytes = message[key] as? Data {
+                return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes) as Any
+            } else {
+                print("ConnectionProvider.extractObject: key \(key) not found in message")
+            }
+        } catch {
+            print("ConnectionProvider.extractObject error \(error.localizedDescription)")
         }
+        return nil
     }
 
-    // TODO: Should this only be called on the phone?
-    // TODO: Maybe calling it on either platform sends a message to the other.
-    func sendMessage(_ bytes: Data) {
-        // Enforce a time gap of at least a half second
-        // between sending messages.
-        let currentTime = CFAbsoluteTimeGetCurrent()
-        if lastMessage + 0.5 > currentTime { return }
-
+    func sendValue(key: String, value: Any) {
         if session.isReachable {
-            // The WCSession sendMessage method requires
-            // a Dictionary with String keys and Any values.
-            let message = [ConnectionProvider.messageKey: bytes]
+            do {
+                let bytes = try NSKeyedArchiver.archivedData(
+                    withRootObject: value,
+                    requiringSecureCoding: true
+                )
 
-            session.sendMessage(message, replyHandler: nil) { error in
-                // This is only called when there is an error.
-                print("ConnectionProvider.sendMessage error: \(error)")
+                // The WCSession sendMessage method requires
+                // a Dictionary with String keys and Any values.
+                let message = [key: bytes]
+                session.sendMessage(message, replyHandler: nil) { error in
+                    // This is only called when there is an error.
+                    print("ConnectionProvider.sendMessage error: \(error)")
+                }
+            } catch {
+                print("ConnectionProvider.sendObject: error \(error.localizedDescription)")
             }
-            lastMessage = CFAbsoluteTimeGetCurrent()
         } else {
-            print("ConnectionProvider.sendMessage: session not reachable")
-            print("Perhaps the watch app is not currently running.")
+            print("ConnectionProvider.sendObject: session not reachable")
+            print("Perhaps the companion app is not currently running.")
         }
     }
 
@@ -104,30 +107,22 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         _: WCSession,
         didReceiveMessage message: [String: Any]
     ) {
-        do {
-            if let bytes = message["text"] as? Data {
-                let object = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes)
-                let text = object as! String
-                print("ConnectionProvider.session: text = \(text)")
-                
-                // Update the model on the main thread.
-                Task {
-                    await MainActor.run { model.message = text }
-                }
+        if let value = extractValue(key: "text", message: message) {
+            let text = value as! String
+            print("ConnectionProvider.session: text = \(text)")
+            // Update the model on the main thread.
+            Task {
+                await MainActor.run { model.message = text }
             }
+        }
 
-            if let bytes = message[ConnectionProvider.messageKey] as? Data {
-                let object = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes)
-                let data = object as! MyData
-                print("ConnectionProvider.session: data = \(data)")
-                
-                // Update the model on the main thread.
-                Task {
-                    await MainActor.run { model.data = data }
-                }
+        if let value = extractValue(key: "data", message: message) {
+            let data = value as! MyData
+            print("ConnectionProvider.session: data = \(data)")
+            // Update the model on the main thread.
+            Task {
+                await MainActor.run { model.data = data }
             }
-        } catch {
-            print("ConnectionProvider.session error unarchiving \(error.localizedDescription)")
         }
     }
 
@@ -157,19 +152,6 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         data.addColor("Turquoise")
         print("model colors = \(model.data.colors)")
 
-        do {
-            let bytes = try NSKeyedArchiver.archivedData(
-                withRootObject: data,
-                requiringSecureCoding: true
-            )
-
-            // Demonstrate that we can unarchive the data.
-            // let newData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes) as? MyData
-            // print("ConnectionProvider.setup: newData = \(String(describing: newData))")
-
-            sendMessage(bytes)
-        } catch {
-            print("ConnectionProvider.setup error archiving \(error.localizedDescription)")
-        }
+        sendValue(key: "data", value: data)
     }
 }
