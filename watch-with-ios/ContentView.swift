@@ -3,16 +3,15 @@ import SwiftUI
 
 struct ContentView: View {
     @State var message = ""
-    
-    //let connectionProvider = ConnectionProvider()
+
     let connectionProvider: ConnectionProvider
     let viewModel: ViewModel
-    
+
     init(model: Model) {
         connectionProvider = ConnectionProvider(model: model)
         viewModel = ViewModel(connectionProvider: connectionProvider)
     }
-    
+
     func sendMessage() {
         let session = connectionProvider.session
         if !session.isReachable {
@@ -20,7 +19,7 @@ struct ContentView: View {
             print("Perhaps the watch app is not currently running.")
             return
         }
-        
+
         do {
             let bytes = try NSKeyedArchiver.archivedData(
                 withRootObject: message,
@@ -33,7 +32,7 @@ struct ContentView: View {
             print("ContentView.sendMessage: error \(error.localizedDescription)")
         }
     }
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -51,10 +50,10 @@ struct ContentView: View {
                 }
             }
         }
-            .onAppear() {
-                connectionProvider.connect()
-                let reachable = connectionProvider.session.isReachable
-                print("session reachable? \(reachable)")
-            }
+        .onAppear {
+            connectionProvider.connect()
+            let reachable = connectionProvider.session.isReachable
+            print("session reachable? \(reachable)")
+        }
     }
 }
