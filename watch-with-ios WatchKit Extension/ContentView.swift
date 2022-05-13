@@ -2,10 +2,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    let viewModel = ViewModel(connectionProvider: ConnectionProvider())
+    let connectionProvider = ConnectionProvider()
+    let viewModel: ViewModel
+    
+    init() {
+        viewModel = ViewModel(connectionProvider: connectionProvider)
+    }
 
     func sendMessage() {
-        let session = viewModel.connectionProvider.session
+        let session = connectionProvider.session
         if !session.isReachable {
             print("ContentView.sendMessage: session not reachable")
             print("Perhaps the phone app is not currently running.")
@@ -18,10 +23,7 @@ struct ContentView: View {
                 withRootObject: message,
                 requiringSecureCoding: true
             )
-            let message = ["message": bytes]
-            session.sendMessage(message, replyHandler: nil) { error in
-                print("ContentView.sendMessage error: \(error)")
-            }
+            connectionProvider.send(message: ["message": bytes])
         } catch {
             print("ContentView.sendMessage: error \(error.localizedDescription)")
         }

@@ -23,10 +23,7 @@ struct ContentView: View {
                 withRootObject: message,
                 requiringSecureCoding: true
             )
-            let message = ["message": bytes]
-            session.sendMessage(message, replyHandler: nil) { error in
-                print("ContentView.sendMessage error: \(error)")
-            }
+            connectionProvider.send(message: ["message": bytes])
         } catch {
             print("ContentView.sendMessage: error \(error.localizedDescription)")
         }
