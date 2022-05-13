@@ -6,8 +6,7 @@ struct watch_with_iosApp: App {
 
     @SceneBuilder var body: some Scene {
         WindowGroup {
-            // ContentView().environmentObject(model)
-            ContentView(model: model)
+            ContentView(model).environmentObject(model)
         }
 
         WKNotificationScene(controller: NotificationController.self, category: "myCategory")

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MyDataView: View {
+    @EnvironmentObject var model: Model
     @ObservedObject var viewModel: ViewModel
     @State var data = MyData()
     
@@ -10,7 +11,8 @@ struct MyDataView: View {
             // onDelete and onMove work inside a List,
             // but not inside a ScrollView.
             List {
-                ForEach(data.colors, id: \.self) { color in
+                //ForEach(data.colors, id: \.self) { color in
+                ForEach(model.colors, id: \.self) { color in
                     Text(color)
                         .foregroundColor(.blue)
                         .padding()

@@ -2,13 +2,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    // @EnvironmentObject var model: Model
+    @State var message = ""
 
     let connectionProvider: ConnectionProvider
     let model: Model
     let viewModel: ViewModel
 
-    init(model: Model) {
+    // We need to pass the model in so it can be used in this initializer.
+    // If @EnvironmentObject is used to get the model,
+    // it isn't available until the body is rendered.
+    init(_ model: Model) {
         self.model = model
         connectionProvider = ConnectionProvider(model: model)
         viewModel = ViewModel(connectionProvider: connectionProvider)
@@ -22,7 +25,6 @@ struct ContentView: View {
             return
         }
 
-        let message = "from watch"
         do {
             let bytes = try NSKeyedArchiver.archivedData(
                 withRootObject: message,
@@ -43,8 +45,11 @@ struct ContentView: View {
                 NavigationLink(destination: MyDataView(viewModel: viewModel)) {
                     Text("View Colors")
                 }
+                TextField("message", text: $message)
+                    //.textFieldStyle(.roundedBorder) // not in watchOS
                 Button("Send to Phone", action: sendMessage)
                     .buttonStyle(.borderedProminent)
+                    .disabled(message.isEmpty)
                 Text("From phone: \(model.message)")
             }
         }

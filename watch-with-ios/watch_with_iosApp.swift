@@ -6,7 +6,7 @@ struct watch_with_iosApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(model: model) //.environmentObject(model)
+            ContentView(model).environmentObject(model)
         }
     }
 }

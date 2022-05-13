@@ -5,9 +5,14 @@ struct ContentView: View {
     @State var message = ""
 
     let connectionProvider: ConnectionProvider
+    let model: Model
     let viewModel: ViewModel
 
-    init(model: Model) {
+    // We need to pass the model in so it can be used in this initializer.
+    // If @EnvironmentObject is used to get the model,
+    // it isn't available until the body is rendered.
+    init(_ model: Model) {
+        self.model = model
         connectionProvider = ConnectionProvider(model: model)
         viewModel = ViewModel(connectionProvider: connectionProvider)
     }
@@ -46,6 +51,7 @@ struct ContentView: View {
                     Button("Send to Watch", action: sendMessage)
                         .buttonStyle(.borderedProminent)
                         .disabled(message.isEmpty)
+                    Text("From watch: \(model.message)")
                     Spacer()
                 }
             }

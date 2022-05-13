@@ -2,10 +2,6 @@ import SwiftUI
 import WatchConnectivity
 
 class ConnectionProvider: NSObject, WCSessionDelegate {
-    // Getting the model through the environment didn't work in this file,
-    // so it is passed in instead.
-    // @EnvironmentObject var model: Model
-
     static let dataClassName = "MyData"
     static let messageKey = "data"
 
@@ -16,6 +12,9 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     var receivedData = MyData() // used on watch
     var lastMessage: CFAbsoluteTime = 0
 
+    // We cannot use @EnvironmentObject to get access to the model here
+    // because that only works in View subclasses.
+    // That is why it is passed to the initializer.
     init(model: Model, session: WCSession = .default) {
         self.model = model
         self.session = session
@@ -124,6 +123,11 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
                 let object = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes)
                 receivedData = object as! MyData
                 print("ConnectionProvider: receivedData = \(receivedData)")
+                
+                // Update the model on the main thread.
+                Task {
+                    await MainActor.run { model.colors = receivedData.colors }
+                }
             }
         } catch {
             print("ConnectionProvider.session error unarchiving \(error.localizedDescription)")
