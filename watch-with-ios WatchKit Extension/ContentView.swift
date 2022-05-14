@@ -30,8 +30,7 @@ struct ContentView: View {
         }
         .onAppear {
             if !connectionProvider.session.isReachable {
-                // This only works if the iOS app is already running.
-                connectionProvider.connect()
+                connectionProvider.session.activate()
             }
         }
     }

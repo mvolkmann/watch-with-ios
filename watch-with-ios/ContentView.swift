@@ -21,10 +21,6 @@ struct ContentView: View {
                     NavigationLink(destination: MyDataView()) {
                         Text("View Colors")
                     }
-                    Button("Connect") {
-                        connectionProvider.connect()
-                    }
-                        .buttonStyle(.borderedProminent)
                     Button("Reachable?") {
                         print("reachable? \(connectionProvider.session.isReachable)")
                     }
@@ -41,8 +37,7 @@ struct ContentView: View {
         }
         .onAppear {
             if !connectionProvider.session.isReachable {
-                // This only works if the watchOS app is already running.
-                connectionProvider.connect()
+                connectionProvider.session.activate()
             }
         }
     }
