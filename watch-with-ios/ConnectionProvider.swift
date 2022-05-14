@@ -3,7 +3,6 @@ import WatchConnectivity
 
 class ConnectionProvider: NSObject, WCSessionDelegate {
     static let instance = ConnectionProvider()
-    
     let model = Model.instance
     let session = WCSession.default
 
@@ -13,30 +12,8 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     override init() {
         super.init()
         self.session.delegate = self
-
-        /*
-        #if os(iOS)
-            print("ConnectionProvider initialized on phone")
-        #endif
-
-        #if os(watchOS)
-            print("ConnectionProvider initialized on watch")
-        #endif
-        */
-
-        //connect()
     }
 
-    func connect() {
-        guard WCSession.isSupported() else {
-            // This happens when a watch is running watchOS 1.0.
-            print("ConnectionProvider.connect: WCSession is not supported")
-            return
-        }
-        print("ConnectionProvider: calling activate")
-        session.activate()
-    }
-    
     func extractValue(key: String, message: [String: Any]) -> Any? {
         do {
             if let bytes = message[key] as? Data {
@@ -49,37 +26,33 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     }
 
     func sendValue(key: String, value: Any) {
-        print("ConnectionProvider.sendValue entered")
         if !session.isReachable {
-            connect()
-        }
-        if session.isReachable {
-            do {
-                let bytes = try NSKeyedArchiver.archivedData(
-                    withRootObject: value,
-                    requiringSecureCoding: true
-                )
-
-                // The WCSession sendMessage method requires
-                // a Dictionary with String keys and Any values.
-                let message = [key: bytes]
-                print("ConnectionProvider.sendValue: calling sendMessage")
-                session.sendMessage(message, replyHandler: nil) { error in
-                    // This is only called when there is an error.
-                    print("ConnectionProvider.sendMessage error: \(error)")
-                }
-            } catch {
-                print("ConnectionProvider.sendObject: error \(error.localizedDescription)")
-            }
-        } else {
-            print("ConnectionProvider.sendObject: session not reachable")
+            print("ConnectionProvider.sendValue: session not reachable")
             print("Perhaps the companion app is not currently running.")
+            return
+        }
+
+        do {
+            let bytes = try NSKeyedArchiver.archivedData(
+                withRootObject: value,
+                requiringSecureCoding: true
+            )
+
+            // The WCSession sendMessage method requires
+            // a Dictionary with String keys and Any values.
+            let message = [key: bytes]
+            print("ConnectionProvider.sendValue: calling sendMessage")
+            session.sendMessage(message, replyHandler: nil) { error in
+                // This is only called when there is an error.
+                print("ConnectionProvider.sendValue error: \(error)")
+            }
+        } catch {
+            print("ConnectionProvider.sendValue: error \(error.localizedDescription)")
         }
     }
 
-    // This is used on the phone and the watch.
-    // It is called when a connection between
-    // the phone and watch is established.
+    // This is called on the phone and the watch when a
+    // connection between the phone and watch is established.
     func session(
         _: WCSession,
         activationDidCompleteWith activationState: WCSessionActivationState,
@@ -95,16 +68,14 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     }
 
     #if os(iOS)
-        // This is only called on the phone.
-        // It is called when there is a temporary disconnection
-        // between the phone and watch.
+        // This is only available in iOS.  It is called when
+        // there is a temporary disconnection between the phone and watch.
         func sessionDidBecomeInactive(_: WCSession) {
             print("phone/watch connection became inactive")
         }
 
-        // This is only called on the phone.
-        // It is called when there is a permanent disconnection
-        // between the phone and watch.
+        // This is only available in iOS.  It is called when
+        // there is a permanent disconnection between the phone and watch.
         func sessionDidDeactivate(_: WCSession) {
             print("phone/watch connection was deactivated")
         }
