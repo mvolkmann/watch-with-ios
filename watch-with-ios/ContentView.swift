@@ -39,11 +39,11 @@ struct ContentView: View {
                 }
             }
         }
-        /*
         .onAppear {
-            // This won't work if the watchOS app isn't running yet.
-            connectionProvider.connect()
+            if !connectionProvider.session.isReachable {
+                // This only works if the watchOS app is already running.
+                connectionProvider.connect()
+            }
         }
-        */
     }
 }

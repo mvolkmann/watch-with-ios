@@ -9,6 +9,8 @@ struct ContentView: View {
 
     func sendMessage() {
         connectionProvider.sendValue(key: "text", value: message)
+        print("sent message: \(message)")
+        message = ""
     }
 
     var body: some View {
@@ -27,8 +29,10 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            // This assumes the iOS app is already running.
-            connectionProvider.connect()
+            if !connectionProvider.session.isReachable {
+                // This only works if the iOS app is already running.
+                connectionProvider.connect()
+            }
         }
     }
 }

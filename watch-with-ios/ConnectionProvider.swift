@@ -15,14 +15,14 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         self.session.delegate = self
 
         /*
-         #if os(iOS)
-             print("ConnectionProvider initialized on phone")
-         #endif
+        #if os(iOS)
+            print("ConnectionProvider initialized on phone")
+        #endif
 
-         #if os(watchOS)
-             print("ConnectionProvider initialized on watch")
-         #endif
-         */
+        #if os(watchOS)
+            print("ConnectionProvider initialized on watch")
+        #endif
+        */
 
         //connect()
     }
@@ -49,6 +49,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     }
 
     func sendValue(key: String, value: Any) {
+        print("ConnectionProvider.sendValue entered")
         if !session.isReachable {
             connect()
         }
