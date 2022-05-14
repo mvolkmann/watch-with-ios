@@ -9,9 +9,17 @@ struct MyDataView: View {
         self.connectionProvider = connectionProvider
     }
     
+    func timestamp() -> String {
+        let format = DateFormatter()
+        format.timeStyle = .medium
+        format.dateStyle = .medium
+        return format.string(from: Date())
+    }
+
     var body: some View {
         VStack {
             Text("Color List").font(.title)
+            Text(timestamp())
             // onDelete and onMove work inside a List,
             // but not inside a ScrollView.
             List {

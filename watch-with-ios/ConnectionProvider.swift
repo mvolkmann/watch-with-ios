@@ -2,8 +2,6 @@ import SwiftUI
 import WatchConnectivity
 
 class ConnectionProvider: NSObject, WCSessionDelegate {
-    static let dataClassName = "MyData"
-
     let model: Model
     let session: WCSession
 
@@ -42,8 +40,6 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         do {
             if let bytes = message[key] as? Data {
                 return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(bytes) as Any
-            } else {
-                print("ConnectionProvider.extractObject: key \(key) not found in message")
             }
         } catch {
             print("ConnectionProvider.extractObject error \(error.localizedDescription)")
@@ -127,14 +123,11 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     }
 
     func setup() {
+        print("ConnectionProvider.setup: entered")
         let data = model.data
         data.colors.removeAll()
 
-        let format = DateFormatter()
-        format.timeStyle = .medium
-        format.dateStyle = .medium
-        let dateString = format.string(from: Date())
-        data.addColor(dateString)
+        data.addColor(timestamp())
 
         data.addColor("Red")
         data.addColor("Orange")
@@ -152,5 +145,12 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         print("model colors = \(model.data.colors)")
 
         sendValue(key: "data", value: data)
+    }
+    
+    func timestamp() -> String {
+        let format = DateFormatter()
+        format.timeStyle = .medium
+        format.dateStyle = .medium
+        return format.string(from: Date())
     }
 }

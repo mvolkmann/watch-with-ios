@@ -9,6 +9,8 @@ import Foundation
 class MyData: NSObject, ObservableObject, NSSecureCoding {
     static var supportsSecureCoding = true
     
+    var connectionProvider: ConnectionProvider? = nil
+    
     // Override the implementation of description in NSObject.
     override var description: String {
         "MyData: colors = \(colors)"
@@ -45,7 +47,8 @@ class MyData: NSObject, ObservableObject, NSSecureCoding {
     
     func deleteColors(at: IndexSet) {
         colors.remove(atOffsets: at)
-        connectionProvider.sendValue(key: "colors", value: colors)
+        print("MyData.deleteColors: colors = \(colors)")
+        connectionProvider?.sendValue(key: "colors", value: colors)
     }
     
     func encode(with coder: NSCoder) {
@@ -56,6 +59,6 @@ class MyData: NSObject, ObservableObject, NSSecureCoding {
     
     func moveColors(from: IndexSet, to: Int) {
         colors.move(fromOffsets: from, toOffset: to)
-        connectionProvider.sendValue(key: "colors", value: colors)
+        connectionProvider?.sendValue(key: "colors", value: colors)
     }
 }

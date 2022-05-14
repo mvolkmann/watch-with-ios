@@ -13,6 +13,7 @@ struct ContentView: View {
     init(_ model: Model) {
         self.model = model
         connectionProvider = ConnectionProvider(model: model)
+        model.data.connectionProvider = connectionProvider
     }
 
     func sendMessage() {
