@@ -3,13 +3,16 @@ import SwiftUI
 // watchOS app
 @main
 struct watch_with_iosApp: App {
-    @StateObject private var model = Model()
+    @StateObject private var model = Model.instance
 
     @SceneBuilder var body: some Scene {
         WindowGroup {
-            ContentView(model).environmentObject(model)
+            ContentView().environmentObject(model)
         }
 
-        WKNotificationScene(controller: NotificationController.self, category: "myCategory")
+        WKNotificationScene(
+            controller: NotificationController.self,
+            category: "myCategory"
+        )
     }
 }

@@ -3,11 +3,7 @@ import SwiftUI
 struct MyDataView: View {
     @EnvironmentObject var model: Model
     
-    let connectionProvider: ConnectionProvider
-    
-    init(_ connectionProvider: ConnectionProvider) {
-        self.connectionProvider = connectionProvider
-    }
+    let connectionProvider = ConnectionProvider.instance
     
     func timestamp() -> String {
         let format = DateFormatter()

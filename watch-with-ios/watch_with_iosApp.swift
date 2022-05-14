@@ -3,11 +3,11 @@ import SwiftUI
 // iOS app
 @main
 struct watch_with_iosApp: App {
-    @StateObject private var model = Model()
+    @StateObject private var model = Model.instance
 
     var body: some Scene {
         WindowGroup {
-            ContentView(model).environmentObject(model)
+            ContentView().environmentObject(model)
         }
     }
 }

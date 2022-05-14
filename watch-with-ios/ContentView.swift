@@ -2,28 +2,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var model: Model
     @State var message = ""
 
-    let connectionProvider: ConnectionProvider
-    let model: Model
-
-    // We need to pass the model in so it can be used in this initializer.
-    // If @EnvironmentObject is used to get the model,
-    // it isn't available until the body is rendered.
-    init(_ model: Model) {
-        self.model = model
-        connectionProvider = ConnectionProvider(model: model)
-        model.data.connectionProvider = connectionProvider
-    }
+    let connectionProvider = ConnectionProvider.instance
 
     func sendMessage() {
-        let session = connectionProvider.session
-        if !session.isReachable {
-            print("ContentView.sendMessage: session not reachable")
-            print("Perhaps the watch app is not currently running.")
-            return
-        }
-
         connectionProvider.sendValue(key: "text", value: message)
         print("sent message: \(message)")
         message = ""
@@ -34,7 +18,7 @@ struct ContentView: View {
             Form {
                 VStack {
                     Text("Phone App").font(.title)
-                    NavigationLink(destination: MyDataView(connectionProvider)) {
+                    NavigationLink(destination: MyDataView()) {
                         Text("View Colors")
                     }
                     TextField("message", text: $message)
@@ -50,8 +34,6 @@ struct ContentView: View {
         .onAppear {
             connectionProvider.connect()
             connectionProvider.setup()
-            let reachable = connectionProvider.session.isReachable
-            print("session reachable? \(reachable)")
         }
     }
 }

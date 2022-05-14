@@ -2,15 +2,15 @@ import SwiftUI
 import WatchConnectivity
 
 class ConnectionProvider: NSObject, WCSessionDelegate {
-    let model: Model
-    let session: WCSession
+    static let instance = ConnectionProvider()
+    
+    let model = Model.instance
+    let session = WCSession.default
 
     // We cannot use @EnvironmentObject to get access to the model here
     // because that only works in View subclasses.
     // That is why it is passed to the initializer.
-    init(model: Model, session: WCSession = .default) {
-        self.model = model
-        self.session = session
+    override init() {
         super.init()
         self.session.delegate = self
 
@@ -24,7 +24,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
          #endif
          */
 
-        connect()
+        //connect()
     }
 
     func connect() {
@@ -33,6 +33,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
             print("ConnectionProvider.connect: WCSession is not supported")
             return
         }
+        print("ConnectionProvider: calling activate")
         session.activate()
     }
     
@@ -48,6 +49,9 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     }
 
     func sendValue(key: String, value: Any) {
+        if !session.isReachable {
+            connect()
+        }
         if session.isReachable {
             do {
                 let bytes = try NSKeyedArchiver.archivedData(
@@ -58,6 +62,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
                 // The WCSession sendMessage method requires
                 // a Dictionary with String keys and Any values.
                 let message = [key: bytes]
+                print("ConnectionProvider.sendValue: calling sendMessage")
                 session.sendMessage(message, replyHandler: nil) { error in
                     // This is only called when there is an error.
                     print("ConnectionProvider.sendMessage error: \(error)")
@@ -72,7 +77,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     }
 
     // This is used on the phone and the watch.
-    // This is called when a connection between
+    // It is called when a connection between
     // the phone and watch is established.
     func session(
         _: WCSession,
@@ -80,6 +85,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         error _: Error?
     ) {
         print("phone/watch connection was activated")
+        print("session reachable? \(session.isReachable)")
     }
 
     #if os(iOS)
@@ -144,6 +150,7 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
         data.addColor("Turquoise")
         print("model colors = \(model.data.colors)")
 
+        print("ConnectionProvider.setup: calling sendValue")
         sendValue(key: "data", value: data)
     }
     
