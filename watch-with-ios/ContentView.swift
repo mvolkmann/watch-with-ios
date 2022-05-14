@@ -21,6 +21,14 @@ struct ContentView: View {
                     NavigationLink(destination: MyDataView()) {
                         Text("View Colors")
                     }
+                    Button("Connect") {
+                        connectionProvider.connect()
+                    }
+                        .buttonStyle(.borderedProminent)
+                    Button("Reachable?") {
+                        print("reachable? \(connectionProvider.session.isReachable)")
+                    }
+                        .buttonStyle(.borderedProminent)
                     TextField("message", text: $message)
                         .textFieldStyle(.roundedBorder)
                     Button("Send to Watch", action: sendMessage)
@@ -31,9 +39,11 @@ struct ContentView: View {
                 }
             }
         }
+        /*
         .onAppear {
+            // This won't work if the watchOS app isn't running yet.
             connectionProvider.connect()
-            connectionProvider.setup()
         }
+        */
     }
 }

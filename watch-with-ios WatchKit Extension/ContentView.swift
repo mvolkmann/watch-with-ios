@@ -27,6 +27,7 @@ struct ContentView: View {
             }
         }
         .onAppear {
+            // This assumes the iOS app is already running.
             connectionProvider.connect()
         }
     }

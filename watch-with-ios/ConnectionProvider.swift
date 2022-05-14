@@ -81,11 +81,16 @@ class ConnectionProvider: NSObject, WCSessionDelegate {
     // the phone and watch is established.
     func session(
         _: WCSession,
-        activationDidCompleteWith _: WCSessionActivationState,
-        error _: Error?
+        activationDidCompleteWith activationState: WCSessionActivationState,
+        error: Error?
     ) {
-        print("phone/watch connection was activated")
-        print("session reachable? \(session.isReachable)")
+        if let error = error {
+            print("ConnectionProvider.session: error \(error.localizedDescription)")
+        } else {
+            // notActivated = 0, inactive = 1, activated = 2
+            print("ConnectionProvider.session: activationState = \(activationState.rawValue)")
+            print("ConnectionProvider.session: reachable? \(session.isReachable)")
+        }
     }
 
     #if os(iOS)
